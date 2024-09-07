@@ -1,0 +1,93 @@
+import React, { useState } from 'react';
+import { Box, Button, TextField, Typography,  Paper } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+
+export default function AvailabilityManager() {
+    const [availabilitySlots, setAvailabilitySlots] = useState([]); 
+    const [editingIndex, setEditingIndex] = useState(null); 
+    const [formData, setFormData] = useState({ date: '', startTime: '', endTime: '' }); 
+
+    
+    const handleAdd = () => {
+        setAvailabilitySlots([...availabilitySlots, formData]);
+        setFormData({ date: '', startTime: '', endTime: '' });
+    };
+
+  
+    const handleEdit = (index) => {
+        setEditingIndex(index);
+        setFormData(availabilitySlots[index]);
+    };
+
+    
+    const handleUpdate = () => {
+        const updatedSlots = [...availabilitySlots];
+        updatedSlots[editingIndex] = formData;
+        setAvailabilitySlots(updatedSlots);
+        setFormData({ date: '', startTime: '', endTime: '' });
+        setEditingIndex(null);
+    };
+
+  
+    const handleDelete = (index) => {
+        setAvailabilitySlots(availabilitySlots.filter((_, i) => i !== index));
+    };
+
+    return (
+        <Box sx={{ p: 2 }}>
+            <Typography variant="h4">Manage Availability</Typography>
+
+            {/* Form for Adding/Editing Availability */}
+            <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
+                <TextField
+                    label="Date"
+                    type="date"
+                    value={formData.date}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    InputLabelProps={{ shrink: true }}
+                />
+                <TextField
+                    label="Start Time"
+                    type="time"
+                    value={formData.startTime}
+                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                    InputLabelProps={{ shrink: true }}
+                />
+                <TextField
+                    label="End Time"
+                    type="time"
+                    value={formData.endTime}
+                    onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                    InputLabelProps={{ shrink: true }}
+                />
+                <Button
+                    variant="contained"
+                    onClick={editingIndex === null ? handleAdd : handleUpdate}
+                >
+                    {editingIndex === null ? 'Add Availability' : 'Update Availability'}
+                </Button>
+            </Box>
+
+            {/* List of Availability Slots */}
+            <Grid container spacing={2} sx={{ mt: 4 }}>
+                {availabilitySlots.map((slot, index) => (
+                    <Grid item xs={12} key={index}>
+                        <Paper sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography>
+                                Date: {slot.date}, Time: {slot.startTime} - {slot.endTime}
+                            </Typography>
+                            <Box>
+                                <Button variant="outlined" sx={{ mr: 2 }} onClick={() => handleEdit(index)}>
+                                    Edit
+                                </Button>
+                                <Button variant="outlined" color="error" onClick={() => handleDelete(index)}>
+                                    Delete
+                                </Button>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                ))}
+            </Grid>
+        </Box>
+    );
+}
