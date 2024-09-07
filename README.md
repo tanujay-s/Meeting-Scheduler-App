@@ -13,9 +13,9 @@ The Meeting Scheduler App is a robust web application designed to manage and sch
 
 ## Screenshots
 
-![Homepage](path/to/homepage-screenshot.png)
-![Admin Page](path/to/admin-page-screenshot.png)
-![User Page](path/to/user-page-screenshot.png)
+![Screenshot (99)](https://github.com/user-attachments/assets/32e3e84c-5546-4e5b-ac22-6a716ebb530c)
+![Screenshot (100)](https://github.com/user-attachments/assets/e5d5ac11-394d-4781-b68e-9e93b91f1ee6)
+![Screenshot (101)](https://github.com/user-attachments/assets/92a3f9e3-778b-43f7-aefc-e4f132aa833d)
 
 *(Replace the above placeholders with actual screenshots of your application.)*
 
