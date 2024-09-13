@@ -3,10 +3,19 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { useState } from 'react';
 import AvailableMeetings from './AvailableMeetings';
 import UserPageAvailability from './UserPageAvailability';
 
+
 export default function SimpleContainer() {
+
+    const [viewForm, setForm] = useState(false);
+
+    const manageViewForm = () => {
+        setForm(!viewForm);
+    }
 
     const formattedDate = new Date().toLocaleDateString(undefined, {
         weekday: 'long',
@@ -26,13 +35,20 @@ export default function SimpleContainer() {
                         {formattedDate}
                     </Typography>
                 </Box>
-                <box>
-                    <AvailableMeetings />
-                </box>
-                <box>
-                    <button></button>
-                    <UserPageAvailability />
-                </box>
+                <Button variant="contained" onClick={manageViewForm} sx={{ marginTop: 5 }}>
+                    {viewForm ? 'Show Meetings' : 'Manage Availability'}
+                </Button>
+
+                {!viewForm ? (
+                    <box>
+                        <AvailableMeetings />
+                    </box>
+                ) : (
+                    <box>
+                        <UserPageAvailability />
+                    </box>
+                )}
+
             </Container>
         </React.Fragment>
     );

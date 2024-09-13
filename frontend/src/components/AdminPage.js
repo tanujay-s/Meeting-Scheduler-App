@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { Box, Typography, Paper, styled, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import UserAvailability from './UserAvailability';
 import ScheduleSession from './ScheduleSession';
 import AdminManageSessions from './AdminManageSessions';
@@ -39,8 +40,11 @@ export default function AdminPage() {
         height: '100%',
     }));
 
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
+
     return (
-        <Box sx={{ flexGrow: 1, marginTop: 25, }}>
+        <Box sx={{ flexGrow: 1, marginTop: isSmallScreen ? 10 : 25 , marginBottom: 3}}>
             <Grid container spacing={6}
                 justifyContent="center"
                 alignItems="stretch"

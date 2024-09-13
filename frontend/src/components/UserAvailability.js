@@ -12,7 +12,7 @@ export default function UserAvailability() {
   const handleEdit = (id) => {
     console.log(`Edit availability with ID: ${id}`);
     // Add logic to handle editing availability
-  };
+  };   
 
   const handleDelete = (id) => {
     console.log(`Delete availability with ID: ${id}`);

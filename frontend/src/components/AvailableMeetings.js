@@ -30,7 +30,7 @@ export default function SimpleContainer() {
 
                     <Box>
                         {/* Displaying current scheduled meetings */}
-                        <Box sx={{ width: '100%', marginTop: 8 }}>
+                        <Box sx={{ width: '100%', marginTop: 8 , marginBottom:3}}>
                         <Grid container rowSpacing={{ xs: 3, sm: 5, md: 7 }} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                          <Grid size={6}>
                              <Item>

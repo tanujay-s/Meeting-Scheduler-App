@@ -1,23 +1,16 @@
-var dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
+const mongoose = require('mongoose');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(process.env.MONGODB_URI, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-async function run() {
+async function connectDB() {
   try {
-    client.connect().then(()=>{
-      console.log('DB Connected');
-    })
-  } catch(err) {
-    console.log(err);
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('DB Connected');
+  } catch (err) {
+    console.error('Error connecting to db', err);
   }
 }
-run().catch(console.dir);
+
+module.exports = { connectDB };

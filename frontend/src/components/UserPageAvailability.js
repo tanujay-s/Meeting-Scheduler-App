@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography,  Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function AvailabilityManager() {
-    const [availabilitySlots, setAvailabilitySlots] = useState([]); 
-    const [editingIndex, setEditingIndex] = useState(null); 
-    const [formData, setFormData] = useState({ date: '', startTime: '', endTime: '' }); 
+    const [availabilitySlots, setAvailabilitySlots] = useState([]);
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [formData, setFormData] = useState({ date: '', startTime: '', endTime: '' });
 
-    
+
     const handleAdd = () => {
         setAvailabilitySlots([...availabilitySlots, formData]);
         setFormData({ date: '', startTime: '', endTime: '' });
     };
 
-  
+
     const handleEdit = (index) => {
         setEditingIndex(index);
         setFormData(availabilitySlots[index]);
     };
 
-    
+
     const handleUpdate = () => {
         const updatedSlots = [...availabilitySlots];
         updatedSlots[editingIndex] = formData;
@@ -28,14 +29,51 @@ export default function AvailabilityManager() {
         setEditingIndex(null);
     };
 
-  
+
     const handleDelete = (index) => {
         setAvailabilitySlots(availabilitySlots.filter((_, i) => i !== index));
     };
 
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     return (
         <Box sx={{ p: 2 }}>
-            <Typography variant="h4">Manage Availability</Typography>
+
+            <Grid container spacing={2} sx={{ mt: 4 }}>
+                {availabilitySlots.map((slot, index) => (
+                    <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        key={index}
+                    >
+                        <Paper sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography>
+                                Date: {slot.date}, Time: {slot.startTime} - {slot.endTime}
+                            </Typography>
+                            <Box>
+                                <Button variant="outlined" sx={{
+                                    mr: 2,
+                                    fontSize: isSmallScreen ? '0.7rem' : '1rem',
+                                    padding: isSmallScreen ? '4px 8px' : '6px 16px'
+                                }} onClick={() => handleEdit(index)}>
+                                    Edit
+                                </Button>
+                                <Button variant="outlined" color="error" sx={{
+                                    mr: 2,
+                                    fontSize: isSmallScreen ? '0.7rem' : '1rem',
+                                    padding: isSmallScreen ? '4px 8px' : '6px 16px'
+                                }} onClick={() => handleDelete(index)}>
+                                    Delete
+                                </Button>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                ))}
+            </Grid>
+
+
+            <Typography variant="h4" sx={{ marginTop: 2 }}>ADD NEW SLOTS</Typography>
 
             {/* Form for Adding/Editing Availability */}
             <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
@@ -68,26 +106,6 @@ export default function AvailabilityManager() {
                 </Button>
             </Box>
 
-            {/* List of Availability Slots */}
-            <Grid container spacing={2} sx={{ mt: 4 }}>
-                {availabilitySlots.map((slot, index) => (
-                    <Grid item xs={12} key={index}>
-                        <Paper sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Typography>
-                                Date: {slot.date}, Time: {slot.startTime} - {slot.endTime}
-                            </Typography>
-                            <Box>
-                                <Button variant="outlined" sx={{ mr: 2 }} onClick={() => handleEdit(index)}>
-                                    Edit
-                                </Button>
-                                <Button variant="outlined" color="error" onClick={() => handleDelete(index)}>
-                                    Delete
-                                </Button>
-                            </Box>
-                        </Paper>
-                    </Grid>
-                ))}
-            </Grid>
         </Box>
     );
 }
