@@ -28,6 +28,7 @@ var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var scheduleRouter = require('./routes/schedule');
 var adminMeetingRouter = require('./routes/meeting');
+var userMeetingRouter = require('./routes/user');
 
 // Import the db connection function
 var { connectDB } = require('./utils/db');
@@ -59,6 +60,7 @@ app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/schedules', scheduleRouter);
 app.use('/meeting',adminMeetingRouter);
+app.use('/api/meetings',userMeetingRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
