@@ -5,6 +5,7 @@ import Navbar from './components/navbar';
 import Home from './components/Home';
 import UserPage from './components/UserPage';
 import AdminPage from './components/AdminPage';
+import SignInPage from './components/SignInPage';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/user" element={<UserPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/signin" element={<SignInPage />} />
       </Routes>
     </Router>
   );

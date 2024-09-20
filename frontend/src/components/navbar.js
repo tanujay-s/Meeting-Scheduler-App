@@ -20,6 +20,7 @@ const navItems = [
   { name: 'Home', route: '/' },
   { name: 'Admin', route: '/admin' },
   { name: 'User', route: '/user' },
+  {name: 'Sign In', route: '/signin'}
 ];
 
 function DrawerAppBar(props) {
