@@ -1,11 +1,11 @@
-import React , {useState} from 'react';
+import React , {useState, useContext} from 'react';
 import axios from '../api/axios';
-import {useNavigate} from 'react-router-dom';
+import { AuthContext } from '../AuthContext';
 import './login.css';
 
 const Login = () =>{
     const [formData, setFormData] = useState({email:'', password:''});
-    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleChange = (e) =>{
         setFormData({...formData, [e.target.name]:e.target.value});
@@ -15,7 +15,12 @@ const Login = () =>{
         try{
             const response = await axios.post('/login',formData);
             alert(response.data.message);
-            navigate('/user');
+            const userData = response.data.user;
+            console.log(response.data);
+            login({
+                user: userData.email, 
+                isAdmin: userData.role === 'admin'  
+              });
         } catch(error){
             console.error('Login error: ', error);
             alert('Login failed');
@@ -31,6 +36,7 @@ const Login = () =>{
                     placeholder='Email'
                     value={formData.email}
                     onChange={handleChange}
+                    autoComplete="on"
                 />
                 <input 
                     name='password'
@@ -38,6 +44,7 @@ const Login = () =>{
                     placeholder='Password'
                     value={formData.password}
                     onChange={handleChange}
+                    autoComplete="on"
                 />
                 <button type='submit'>Login</button>
             </form>

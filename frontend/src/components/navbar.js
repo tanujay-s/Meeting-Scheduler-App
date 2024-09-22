@@ -13,19 +13,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../AuthContext';  
 
 const drawerWidth = 240;
-const navItems = [
-  { name: 'Home', route: '/' },
-  { name: 'Admin', route: '/admin' },
-  { name: 'User', route: '/user' },
-  {name: 'Sign In', route: '/signin'}
-];
 
 function DrawerAppBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const { auth, logout } = React.useContext(AuthContext);  
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -38,13 +35,38 @@ function DrawerAppBar(props) {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item.name} disablePadding>
-            <ListItemButton component={Link} to={item.route} sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item.name} />
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/" sx={{ textAlign: 'center' }}>
+            <ListItemText primary="Home" />
+          </ListItemButton>
+        </ListItem>
+        {auth.isLoggedIn && auth.isAdmin && (
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/admin" sx={{ textAlign: 'center' }}>
+              <ListItemText primary="Admin" />
             </ListItemButton>
           </ListItem>
-        ))}
+        )}
+        {auth.isLoggedIn && !auth.isAdmin && (
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/user" sx={{ textAlign: 'center' }}>
+              <ListItemText primary="User" />
+            </ListItemButton>
+          </ListItem>
+        )}
+        {auth.isLoggedIn ? (
+          <ListItem disablePadding>
+            <ListItemButton onClick={logout} sx={{ textAlign: 'center' }}>
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/signin" sx={{ textAlign: 'center' }}>
+              <ListItemText primary="Sign In" />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -73,16 +95,28 @@ function DrawerAppBar(props) {
             Meeting Scheduler
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button
-                key={item.name}
-                component={Link}
-                to={item.route}
-                sx={{ color: '#fff' }}
-              >
-                {item.name}
+            <Button component={Link} to="/" sx={{ color: '#fff' }}>
+              Home
+            </Button>
+            {auth.isLoggedIn && auth.isAdmin && (
+              <Button component={Link} to="/admin" sx={{ color: '#fff' }}>
+                Admin
               </Button>
-            ))}
+            )}
+            {auth.isLoggedIn && !auth.isAdmin && (
+              <Button component={Link} to="/user" sx={{ color: '#fff' }}>
+                User
+              </Button>
+            )}
+            {auth.isLoggedIn ? (
+              <Button onClick={logout} sx={{ color: '#fff' }}>
+                Logout
+              </Button>
+            ) : (
+              <Button component={Link} to="/signin" sx={{ color: '#fff' }}>
+                Sign In
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
