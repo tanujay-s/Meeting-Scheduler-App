@@ -37,7 +37,7 @@ export default function AvailabilityManager() {
     const isSmallScreen = useMediaQuery('(max-width:600px)');
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
 
             <Grid container spacing={2} sx={{ mt: 4 }}>
                 {availabilitySlots.map((slot, index) => (

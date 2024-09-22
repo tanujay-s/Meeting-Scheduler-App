@@ -14,9 +14,8 @@ const Login = () =>{
         e.preventDefault();
         try{
             const response = await axios.post('/login',formData);
-            alert(response.data.message);
+            alert(response.data.message); 
             const userData = response.data.user;
-            console.log(response.data);
             login({
                 user: userData.email, 
                 isAdmin: userData.role === 'admin'  
