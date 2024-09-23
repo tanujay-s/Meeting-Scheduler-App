@@ -165,6 +165,6 @@ exports.showUserAvailability = async (req, res) =>{
     }
 };
 
-//some changed to be made in frontend to show user availability ,
+//some changes to be made in frontend to show user availability ,
 //admin can only view the availability slot but can not delete it or edit it
 // admin can view user's name, email, date, start time and end time
