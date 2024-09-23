@@ -40,13 +40,13 @@ export default function SimpleContainer() {
                 </Button>
 
                 {!viewForm ? (
-                    <box>
+                    <Box>
                         <AvailableMeetings />
-                    </box>
+                    </Box>
                 ) : (
-                    <box>
+                    <Box>
                         <UserPageAvailability />
-                    </box>
+                    </Box>
                 )}
 
             </Container>
