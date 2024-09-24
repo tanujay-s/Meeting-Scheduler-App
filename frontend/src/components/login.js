@@ -17,7 +17,8 @@ const Login = () =>{
             alert(response.data.message); 
             const userData = response.data.user;
             login({
-                user: userData.email, 
+                user: userData.email,
+                userId: userData._id, 
                 isAdmin: userData.role === 'admin'  
               });
         } catch(error){

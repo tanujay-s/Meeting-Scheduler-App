@@ -5,12 +5,14 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
+import {CircularProgress} from '@mui/material';
 import axios from '../api/axios';
 
 
 
 const UserPage = () => {
     const [meetings, setMeetings] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     // Fetch meetings from the backend
     useEffect(() => {
@@ -18,13 +20,23 @@ const UserPage = () => {
             try {
                 const response = await axios.get('/api/meetings'); 
                 setMeetings(response.data);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching meetings:', error);
+                setLoading(false);
             }
         };
 
         fetchMeetings();
     }, []);
+
+    if (loading) {
+        return (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+          </Box>
+        );
+     }
 
     return (
         <React.Fragment>
@@ -58,7 +70,7 @@ const UserPage = () => {
                                             </Typography>
                                             
                                             <Typography variant="body2" color="text.secondary">
-                                                Date: {new Date(meeting.date).toLocaleDateString()}
+                                                Date: {new Date(meeting.date).toLocaleDateString('en-GB')}
                                             </Typography>
                                         </Paper>
                                     </Grid>

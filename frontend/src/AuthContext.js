@@ -25,7 +25,8 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setAuth({
       isLoggedIn: true,
-      user: userData.user,       
+      user: userData.user,
+      id: userData.userId,       
       isAdmin: userData.isAdmin  
     });
 
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('auth', JSON.stringify({
       isLoggedIn: true,
       user: userData.user,
+      id:userData.userId,
       isAdmin: userData.isAdmin
     }));
 

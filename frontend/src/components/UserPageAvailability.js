@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, TextField, Typography, Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, Paper,CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from '../api/axios';
@@ -9,14 +9,17 @@ export default function AvailabilityManager() {
     const [availabilitySlots, setAvailabilitySlots] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [formData, setFormData] = useState({ date: '', startTime: '', endTime: '' });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchSlots = async () => {
             try {
                 const response = await axios.get('/schedules');
                 setAvailabilitySlots(response.data.availabilitySlots);
+                setLoading(false)
             } catch (error) {
                 console.error('Error fetching slots: ', error);
+                setLoading(false);
             }
         };
         fetchSlots();
@@ -49,6 +52,14 @@ export default function AvailabilityManager() {
 
     const isSmallScreen = useMediaQuery('(max-width:600px)');
 
+    if (loading) {
+        return (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+          </Box>
+        );
+      }
+
     return (
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
 
@@ -63,7 +74,7 @@ export default function AvailabilityManager() {
                         >
                             <Paper sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Typography>
-                                    Date: {new Date(slot.date).toLocaleDateString()}, Time: {slot.startTime} - {slot.endTime}
+                                    Date: {new Date(slot.date).toLocaleDateString('en-GB')}, Time: {slot.startTime} - {slot.endTime}
                                 </Typography>
                                 <Box>
                                     <Button variant="outlined" sx={{

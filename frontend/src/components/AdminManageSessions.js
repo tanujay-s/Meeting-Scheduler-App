@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
-import { Box, Typography, Button, List, ListItem, ListItemText, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Button, Paper,CircularProgress, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import axios from 'axios';
 
 export default function AdminManageSessions() {
-  // Dummy data for scheduled sessions
-  const [sessions, setSessions] = useState([
-    { id: 1, title: 'Session 1', time: '10:00 AM - 11:00 AM' },
-    { id: 2, title: 'Session 2', time: '12:00 PM - 1:00 PM' },
-    { id: 3, title: 'Session 3', time: '2:00 PM - 3:00 PM' },
-  ]);
 
-  const [rescheduleId, setRescheduleId] = useState(null); // Tracks session to reschedule
-  const [newTime, setNewTime] = useState(''); // New time for rescheduling
+  const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [rescheduleId, setRescheduleId] = useState(null); 
+  const [newTime, setNewTime] = useState(''); 
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const response = await axios.get('/meeting');
+        setSessions(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching scheduled sessions: ', error);
+        setLoading(false);
+      }
+    };
+    fetchSessions();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   // Handle reschedule
   const handleReschedule = (id) => {
@@ -34,36 +53,62 @@ export default function AdminManageSessions() {
 
   return (
     <Box sx={{ mt: 5, textAlign: 'center' }}>
-      <Typography variant="h5" gutterBottom>
-        Manage Sessions
-      </Typography>
-
-      {/* Displaying current sessions */}
-      <List>
-        {sessions.map((session) => (
-          <ListItem key={session.id}>
-            <ListItemText
-              primary={session.title}
-              secondary={`Time: ${session.time}`}
-            />
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleReschedule(session.id)}
-              sx={{ mr: 2 }}
-            >
-              Reschedule
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => handleCancel(session.id)}
-            >
-              Cancel
-            </Button>
-          </ListItem>
-        ))}
-      </List>
+      <Box sx={{ mt: 5, textAlign: 'center' }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Manage scheduled sessions
+        </Typography>
+        <TableContainer component={Paper} sx={{ mt: 4 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Participants</TableCell>
+                <TableCell>Reschedule session</TableCell>
+                <TableCell>Cancel Session</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sessions.map((session) => (
+                <TableRow key={session.id}>
+                  <TableCell>{session.title}</TableCell>
+                  <TableCell>{new Date(session.date).toLocaleDateString()}</TableCell>
+                  <TableCell>{session.timeSlot.startTime}-{session.timeSlot.endTime}</TableCell>
+                  <TableCell>
+                    {
+                      session.participants.map((participant, index) => (
+                        <div key={index}>
+                          {participant.name}({participant.email})
+                        </div>
+                      ))
+                    }
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => handleReschedule(session.id)}
+                      sx={{ mr: 2 }}
+                    >
+                      Reschedule
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => handleCancel(session.id)}
+                    >
+                      Cancel
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
 
       {/* Reschedule Form */}
       {rescheduleId && (

@@ -164,7 +164,3 @@ exports.showUserAvailability = async (req, res) =>{
         res.status(500).json({message: 'Server error', error});
     }
 };
-
-//some changes to be made in frontend to show user availability ,
-//admin can only view the availability slot but can not delete it or edit it
-// admin can view user's name, email, date, start time and end time
