@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from '../api/axios';
 import {useNavigate} from 'react-router-dom';
+import './login.css';
 
 const Signup = () =>{
         const [formData, setFormData] = useState({name:'',email:'',password:''});

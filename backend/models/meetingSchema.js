@@ -14,8 +14,3 @@ const meetingSchema = mongoose.Schema({
 });
  
 module.exports = mongoose.model('Meeting', meetingSchema);
-//some of the functionalities are chnaged from the current UI in admin schedule session 
-//time slot is changed to add starttime and end time
-//a new input field title is added
-// meeting type should be correct exactly the same string in the form like here in the shcema
-// date is also added as a new field
