@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, TextField, Typography, Paper,CircularProgress } from '@mui/material';
+import { Box, Button, TextField, Typography, Paper, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from '../api/axios';
@@ -26,51 +26,102 @@ export default function AvailabilityManager() {
     }, []);
 
     const handleAdd = () => {
-        setAvailabilitySlots([...availabilitySlots, formData]);
-        setFormData({ date: '', startTime: '', endTime: '' });
+        const addSlot = async () => {
+            try {
+                const response = await axios.post('/schedules', formData);
+                setAvailabilitySlots([...availabilitySlots, formData]);
+                setFormData({ date: '', startTime: '', endTime: '' });
+                alert(response.data.message);
+            } catch (error) {
+                console.error('Error adding availability slot: ', error);
+                alert('Failed to add new slot');
+            }
+        }
+        addSlot();
     };
 
+    const handleEdit = (id) => {
+        const slotToEdit = availabilitySlots.find(slot => slot._id === id);
+        if (slotToEdit) {
+            const formattedDate = new Date(slotToEdit.date).toISOString().split('T')[0];
 
-    const handleEdit = (index) => {
-        setEditingIndex(index);
-        setFormData(availabilitySlots[index]);
+            setFormData({
+                ...slotToEdit,
+                date: formattedDate
+            });
+            setEditingIndex(id);
+
+        } else {
+            console.error('Slot not found');
+        }
     };
 
 
     const handleUpdate = () => {
-        const updatedSlots = [...availabilitySlots];
-        updatedSlots[editingIndex] = formData;
-        setAvailabilitySlots(updatedSlots);
-        setFormData({ date: '', startTime: '', endTime: '' });
-        setEditingIndex(null);
+        const editSlot = async () => {
+            try {
+                const response = await axios.put(`/schedules/${editingIndex}`, formData);
+                alert(response.data.message);
+                const updatedSlots = availabilitySlots.map(slot =>
+                    slot._id === editingIndex ? { ...slot, ...formData } : slot
+                );
+
+                setAvailabilitySlots(updatedSlots);
+                setFormData({ date: '', startTime: '', endTime: '' });
+                setEditingIndex(null);
+
+            } catch (error) {
+                console.error('Error updating slot: ', error);
+                alert('Failed to update slot');
+            }
+        };
+        editSlot();
     };
 
 
-    const handleDelete = (index) => {
-        setAvailabilitySlots(availabilitySlots.filter((_, i) => i !== index));
+    const handleDelete = (id) => {
+        const slotToDelete = availabilitySlots.find(slot => slot._id === id);
+    
+        if (slotToDelete) {
+            const deleteSlot = async () => {
+                try {
+                    const response = await axios.delete(`/schedules/${id}`);                    
+                    alert(response.data.message);
+                    setAvailabilitySlots(prevSlots => prevSlots.filter(slot => slot._id !== id));
+                    
+                } catch (error) {
+                    console.error('Error deleting slot: ', error);
+                    alert('Failed to delete slot');
+                }
+            };
+    
+            deleteSlot();
+        } else {
+            console.error('Slot not found:', id);
+        }
     };
 
     const isSmallScreen = useMediaQuery('(max-width:600px)');
 
     if (loading) {
         return (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress />
-          </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
         );
-      }
+    }
 
     return (
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
 
             <Grid container spacing={2} sx={{ mt: 4 }}>
                 {availabilitySlots.length > 0 ? (
-                    availabilitySlots.map((slot, index) => (
+                    availabilitySlots.map((slot) => (
                         <Grid
                             item
                             xs={12}
                             sm={6}
-                            key={index}
+                            key={slot._id}
                         >
                             <Paper sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Typography>
@@ -81,14 +132,14 @@ export default function AvailabilityManager() {
                                         mr: 2,
                                         fontSize: isSmallScreen ? '0.7rem' : '1rem',
                                         padding: isSmallScreen ? '4px 8px' : '6px 16px'
-                                    }} onClick={() => handleEdit(index)}>
+                                    }} onClick={() => handleEdit(slot._id)}>
                                         Edit
                                     </Button>
                                     <Button variant="outlined" color="error" sx={{
                                         mr: 2,
                                         fontSize: isSmallScreen ? '0.7rem' : '1rem',
                                         padding: isSmallScreen ? '4px 8px' : '6px 16px'
-                                    }} onClick={() => handleDelete(index)}>
+                                    }} onClick={() => handleDelete(slot._id)}>
                                         Delete
                                     </Button>
                                 </Box>
@@ -102,10 +153,8 @@ export default function AvailabilityManager() {
                 )}
             </Grid>
 
-
             <Typography variant="h4" sx={{ marginTop: 2 }}>ADD NEW SLOTS</Typography>
 
-            {/* Form for Adding/Editing Availability */}
             <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
                 <TextField
                     label="Date"
