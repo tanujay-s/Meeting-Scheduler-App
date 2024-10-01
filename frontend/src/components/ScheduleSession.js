@@ -26,7 +26,6 @@ export default function ScheduleSession() {
 
     try {
       const response = await axios.post('/meeting', sessionData); 
-      console.log('Session created successfully:', response.data);
       alert(response.data.message);
       setTitle('');
       setSessionType('');

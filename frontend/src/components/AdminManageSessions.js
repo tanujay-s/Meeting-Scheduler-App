@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Paper,CircularProgress, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import axios from 'axios';
+import { Box, Typography, Button, Paper, CircularProgress, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import axios from '../api/axios';
 
 export default function AdminManageSessions() {
 
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [rescheduleId, setRescheduleId] = useState(null); 
-  const [newTime, setNewTime] = useState(''); 
+  const [rescheduleId, setRescheduleId] = useState(null);
+  const [newDate, setnewDate] = useState('');
+  const [newStartTime, setnewStartTime] = useState('');
+  const [newEndTime, setnewEndTime] = useState('');
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -31,24 +33,54 @@ export default function AdminManageSessions() {
     );
   }
 
-  // Handle reschedule
   const handleReschedule = (id) => {
     setRescheduleId(id);
   };
 
-  // Submit reschedule changes
   const submitReschedule = () => {
-    const updatedSessions = sessions.map((session) =>
-      session.id === rescheduleId ? { ...session, time: newTime } : session
-    );
-    setSessions(updatedSessions);
-    setRescheduleId(null); // Close reschedule form
-    setNewTime(''); // Reset time field
+    const updateData = async () => {
+      try {
+        const formData = {
+          date: newDate,
+          startTime: newStartTime,
+          endTime: newEndTime
+        };
+        const response = await axios.put(`/meeting/${rescheduleId}`, formData);
+        alert(response.data.message);
+        const updatedSessions = sessions.map(session =>
+          session._id === rescheduleId
+            ? {
+              ...session,
+              date: formData.date,
+              timeSlot: {
+                startTime: formData.startTime,
+                endTime: formData.endTime
+              }
+            }
+            : session
+        );
+        setSessions(updatedSessions);
+        setRescheduleId(null);
+      } catch (error) {
+        console.error('Error rescheduling meeting: ', error);
+        alert(error.message);
+      }
+    }
+    updateData();
   };
 
-  // Handle cancel
   const handleCancel = (id) => {
-    setSessions(sessions.filter((session) => session.id !== id));
+    const deleteSession = async () =>{
+        try{
+          const response =  await axios.delete(`/meeting/${id}`);
+          alert(response.data.message);
+          setSessions(sessions.filter((session) => session._id !== id));
+        } catch(error) {
+          console.error('Error canceling session: ', error);
+          alert('Failed to cancel session');
+        }
+    }
+      deleteSession();
   };
 
   return (
@@ -71,9 +103,9 @@ export default function AdminManageSessions() {
             </TableHead>
             <TableBody>
               {sessions.map((session) => (
-                <TableRow key={session.id}>
+                <TableRow key={session._id}>
                   <TableCell>{session.title}</TableCell>
-                  <TableCell>{new Date(session.date).toLocaleDateString()}</TableCell>
+                  <TableCell>{new Date(session.date).toLocaleDateString('en-GB')}</TableCell>
                   <TableCell>{session.timeSlot.startTime}-{session.timeSlot.endTime}</TableCell>
                   <TableCell>
                     {
@@ -88,7 +120,7 @@ export default function AdminManageSessions() {
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => handleReschedule(session.id)}
+                      onClick={() => handleReschedule(session._id)}
                       sx={{ mr: 2 }}
                     >
                       Reschedule
@@ -98,7 +130,7 @@ export default function AdminManageSessions() {
                     <Button
                       variant="outlined"
                       color="error"
-                      onClick={() => handleCancel(session.id)}
+                      onClick={() => handleCancel(session._id)}
                     >
                       Cancel
                     </Button>
@@ -115,9 +147,30 @@ export default function AdminManageSessions() {
         <Box sx={{ mt: 3 }}>
           <Typography variant="h6">Reschedule Session</Typography>
           <TextField
-            label="New Time"
-            value={newTime}
-            onChange={(e) => setNewTime(e.target.value)}
+            label="Date"
+            type="date"
+            value={newDate}
+            onChange={(e) => setnewDate(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Start Time"
+            type="time"
+            value={newStartTime}
+            onChange={(e) => setnewStartTime(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            required
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="End Time"
+            type="time"
+            value={newEndTime}
+            onChange={(e) => setnewEndTime(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            required
             sx={{ mb: 2 }}
           />
           <Button

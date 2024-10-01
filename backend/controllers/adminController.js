@@ -21,7 +21,6 @@ exports.createMeeting = async (req, res) =>{
 
         const participantsIds = participants.map(user => user._id);
 
-        //check if time slot is available for each participants
         for (const participantsId of participantsIds){
             const availability = await Availability.findOne({
                 userId: participantsId,
@@ -37,7 +36,7 @@ exports.createMeeting = async (req, res) =>{
             }
         }
 
-        //check if user has already a meeting in the slot that you are trying to book
+        //check user has already a meeting in the slot that you are trying to book
         const overlap = await Meeting.find({
             date,
             $or : [
