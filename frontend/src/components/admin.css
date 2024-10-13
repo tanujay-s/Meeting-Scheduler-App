@@ -1,0 +1,10 @@
+/* Reschedule box css */
+.boxContainer{
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+} 
+.boxHeading{
+    margin-bottom: 50px;
+}

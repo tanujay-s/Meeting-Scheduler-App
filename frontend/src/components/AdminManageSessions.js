@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Paper, CircularProgress, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import axios from '../api/axios';
+import './admin.css';
 
 export default function AdminManageSessions() {
 
@@ -144,8 +145,8 @@ export default function AdminManageSessions() {
 
       {/* Reschedule Form */}
       {rescheduleId && (
-        <Box sx={{ mt: 3 }}>
-          <Typography variant="h6">Reschedule Session</Typography>
+        <Box sx={{ mt: 3 }}  className='boxContainer'>
+          <Typography variant="h6" className='boxHeading'>Reschedule Session</Typography>
           <TextField
             label="Date"
             type="date"
@@ -153,7 +154,7 @@ export default function AdminManageSessions() {
             onChange={(e) => setnewDate(e.target.value)}
             InputLabelProps={{ shrink: true }}
             required
-            sx={{ mb: 2 }}
+            sx={{ mb: 2 }} 
           />
           <TextField
             label="Start Time"
