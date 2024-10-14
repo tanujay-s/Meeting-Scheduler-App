@@ -1,0 +1,97 @@
+.boxContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: transparent;
+}
+
+
+.headingTexts {
+    border-radius: 10px;
+    box-shadow: -2px 5px 15px rgba(0, 0, 0, 0.15);
+    background-color: transparent;
+    padding: 20px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.headingTexts:hover {
+    transform: translateY(-5px);
+}
+
+.boxTextTop {
+    text-decoration-thickness: 5px;
+    font-family: "Times New Roman", Times, serif;
+    font-stretch: ultra-condensed;
+    font-weight: 700;
+    color: #343a40;
+}
+
+.boxTextBottom {
+    font-family: "Arial", sans-serif;
+    color: #495057;
+}
+
+.react-calendar {
+    border-radius: 15px;
+    border: none;
+    background-color: transparent;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    font-family: "Arial", sans-serif;
+    margin-top: 10px;
+}
+
+.react-calendar:hover {
+    transform: translateY(-5px);
+}
+
+.react-calendar__navigation {
+    background-color: #007bff;
+    color: white;
+    border-radius: 15px 15px 0 0;
+    padding: 10px;
+}
+
+.react-calendar__navigation button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: background 0.2s;
+}
+
+.react-calendar__navigation button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.react-calendar__tile {
+    background: #ffffff;
+    color: #495057;
+    border-radius: 10px;
+    padding: 10px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+    background: #007bff;
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.react-calendar__tile--active {
+    background: #0056b3;
+    color: white;
+    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.react-calendar__month-view__days__day--weekend {
+    color: #dc3545;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+    color: #ced4da;
+} 
