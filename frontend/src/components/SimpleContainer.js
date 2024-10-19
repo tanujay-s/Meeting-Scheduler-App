@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import AvailableMeetings from './AvailableMeetings';
 import UserPageAvailability from './UserPageAvailability';
+import './home.css';
 
 
 export default function SimpleContainer() {

@@ -43,7 +43,7 @@ const UserPage = () => {
             <CssBaseline />
             <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
                 <Box>
-                    <Box sx={{ width: '100%', marginTop: 8, marginBottom: 3 }}>
+                    <Box sx={{ width: '100%', marginTop: 8, marginBottom: 3 }} >
                         <Grid 
                             container 
                             spacing={2} 
@@ -52,9 +52,9 @@ const UserPage = () => {
                         >
                             {meetings.length > 0 ? (
                                 meetings.map((meeting, index) => (
-                                    <Grid item xs={12} key={index}>
+                                    <Grid item xs={12} key={index}  className = 'userMeetingContainer'>
                                         <Paper sx={{ padding: 2 }}>
-                                            <Typography variant="h6">
+                                            <Typography variant="h6" className='userMeetingTitle'>
                                                 {meeting.title}
                                             </Typography>
                                             

@@ -96,3 +96,15 @@
 .react-calendar__month-view__days__day--neighboringMonth {
     color: #ced4da;
 } 
+
+
+/* user page css */
+.userMeetingContainer{
+    margin: 0px;
+    padding: 0px;
+    box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.userMeetingTitle{
+    font-family: "Times New Roman", Times, serif;
+}
